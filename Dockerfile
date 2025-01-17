@@ -15,4 +15,4 @@ COPY . /app/
 EXPOSE 8000
 
 # Use Daphne to serve the app
-CMD ["daphne", "-u", "/tmp/daphne.sock", "hooks_backend.asgi:application"]
+CMD ["daphne", "-b", "0.0.0.0", "-b", "8000" "hooks_backend.asgi:application"]
