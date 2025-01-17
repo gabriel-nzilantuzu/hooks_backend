@@ -14,12 +14,12 @@ spec:
     spec:
       containers:
         - name: django-app
-          image: ${{ secrets.D_USERNAME }}/task:1.5 # Replace with your image tag
+          image: namespaxe/hooks_backend:1.0
           ports:
             - containerPort: 8000
           env:
             - name: REDIS_HOST
-              value: "redis-service" # This must match the Redis service name in your cluster
+              value: "redis-service"
 ---
 apiVersion: v1
 kind: Service
