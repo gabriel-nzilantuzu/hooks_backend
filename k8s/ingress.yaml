@@ -7,14 +7,20 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/affinity: "cookie"
     nginx.ingress.kubernetes.io/enable-websocket: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
     - host: log-analytics.ns.namespaxe.com
       http:
         paths:
-          - path: /
+          - path: /webhook
+            pathType: Prefix
+            backend:
+              service:
+                name: django-app
+                port:
+                  number: 80
+          - path: /logger
             pathType: Prefix
             backend:
               service:
