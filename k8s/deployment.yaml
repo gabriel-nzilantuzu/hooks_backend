@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: django-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: django-app
@@ -20,6 +20,13 @@ spec:
           env:
             - name: REDIS_HOST
               value: "redis-service"
+          resources:
+            requests:
+              memory: "190Mi"
+              cpu: "60m"
+            limits:
+              memory: "195Mi"
+              cpu: "65m"
 ---
 apiVersion: v1
 kind: Service
@@ -30,8 +37,10 @@ spec:
     app: django-app
   ports:
     - protocol: TCP
-      port: 8000
+      port: 80
       targetPort: 8000
+  sessionAffinity: ClientIP
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -52,6 +61,13 @@ spec:
           image: redis:6.2
           ports:
             - containerPort: 6379
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "30m"
+            limits:
+              memory: "100Mi"
+              cpu: "40m"
 ---
 apiVersion: v1
 kind: Service
