@@ -47,7 +47,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          tags: ${{ secrets.D_USERNAME }}/hooks_backend:1.4
+          tags: ${{ secrets.D_USERNAME }}/hooks_backend:1.6
           push: true
 
       - name: Namespaxe login
@@ -76,4 +76,5 @@ jobs:
 
       - name: Deploy the app using kubectl
         run: |
+          kubectl delete -f k8s/deployment.yaml
           kubectl apply -f k8s/deployment.yaml
