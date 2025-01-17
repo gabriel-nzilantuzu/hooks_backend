@@ -1,0 +1,5 @@
+daphne
+channels
+channels_redis
+redis
+jango
