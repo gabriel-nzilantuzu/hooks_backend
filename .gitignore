@@ -27,7 +27,6 @@ settings_local.py
 
 .coverage
 .tox/
-.nox/
 .hypothesis/
 .pytest_cache/
 
