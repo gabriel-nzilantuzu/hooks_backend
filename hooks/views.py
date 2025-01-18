@@ -1,18 +1,20 @@
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from asgiref.sync import sync_to_async
+from asgiref.sync import sync_to_async, async_to_sync
 from channels.layers import get_channel_layer
 
-# A function for returning JsonResponse (sync, since JsonResponse itself isn't async-safe)
-def json_response(data, status=200):
+# An async-safe function for returning JsonResponse
+async def async_json_response(data, status=200):
     return JsonResponse(data, status=status)
 
+@sync_to_async
 @csrf_exempt
+@async_to_sync
 async def webhook_listener(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
+            data = json.loads(request.body)  # Ensure this is valid JSON
             channel_layer = get_channel_layer()
             await channel_layer.group_send(
                 'logger_group',
@@ -21,7 +23,7 @@ async def webhook_listener(request):
                     'content': data,
                 }
             )
-            return json_response({'status': 'success', 'message': 'Data received and forwarded to WebSocket'})
+            return await async_json_response({'status': 'success', 'message': 'Data received and forwarded to WebSocket'})
         except json.JSONDecodeError:
-            return json_response({'status': 'error', 'message': 'Invalid JSON'}, status=400)
-    return json_response({'status': 'error', 'message': 'Invalid method'}, status=405)
+            return await async_json_response({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+    return await async_json_response({'status': 'error', 'message': 'Invalid method'}, status=405)
