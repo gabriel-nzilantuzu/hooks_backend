@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: django-app
-          image: namespaxe/hooks_backend:2.0
+          image: namespaxe/hooks_backend:2.1
           ports:
             - containerPort: 8000
           env:
