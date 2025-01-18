@@ -2,7 +2,7 @@ import requests
 import json
 
 # Define the webhook URL
-url = "http://log-analytics.ns.namespaxe.com/webhook"
+url = "https://log-analytics.ns.namespaxe.com/webhook"
 
 # Define the payload
 payload = {

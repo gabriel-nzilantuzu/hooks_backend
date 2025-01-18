@@ -22,7 +22,16 @@ async def webhook_listener(request):
                 }
             )
             
-            return JsonResponse({'status': 'success', 'message': 'Data received and forwarded to WebSocket'}, status=200)
+            return await sync_to_async(JsonResponse)(
+                {'status': 'success', 'message': 'Data received and forwarded to WebSocket'}, 
+                status=200
+            )
         except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
-    return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=405)
+            return await sync_to_async(JsonResponse)(
+                {'status': 'error', 'message': 'Invalid JSON'}, 
+                status=400
+            )
+    return await sync_to_async(JsonResponse)(
+        {'status': 'error', 'message': 'Invalid method'}, 
+        status=405
+    )
